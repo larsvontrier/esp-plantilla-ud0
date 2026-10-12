@@ -1,0 +1,30 @@
+# Comprobaciones automaticas de la practica integradora de la UD0.
+# Se ejecutan en cada push y orientan durante el trabajo; no califican.
+name: Comprobaciones
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  comprobaciones:
+    # no se ejecutan en el propio repositorio plantilla, solo en las copias
+    if: ${{ !github.event.repository.is_template }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Descargar el repositorio con todo su historial
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Preparar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Instalar las herramientas de comprobación
+        run: python -m pip install --quiet pytest nbformat
+
+      - name: Ejecutar las comprobaciones
+        run: python -m pytest -v tests
