@@ -63,9 +63,17 @@ def test_entorno_virtual_no_versionado():
 def test_requirements():
     requisitos = RAIZ / "requirements.txt"
     assert requisitos.is_file(), "Falta el archivo requirements.txt."
-    assert "ipython" in requisitos.read_text(encoding="utf-8", errors="replace").lower(), (
-        "El requirements.txt no incluye ipython."
+    datos = requisitos.read_bytes()
+    # pip freeze > requirements.txt en Windows PowerShell 5.1 escribe UTF-16
+    utf16 = datos.startswith((b"\xff\xfe", b"\xfe\xff")) or b"\x00" in datos
+    assert not utf16, (
+        "El requirements.txt está codificado en UTF-16, no en UTF-8: suele ocurrir al "
+        "generarlo con 'pip freeze > requirements.txt' en Windows PowerShell. Se vuelve "
+        "a generar con 'python -m pip freeze | Out-File -Encoding utf8 requirements.txt' "
+        "(o desde cmd o Git Bash) y se sube de nuevo."
     )
+    texto = datos.decode("utf-8-sig", errors="replace")
+    assert "ipython" in texto.lower(), "El requirements.txt no incluye ipython."
 
 
 def test_cuaderno():

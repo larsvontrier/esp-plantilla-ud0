@@ -22,6 +22,7 @@ Contenido del repositorio:
 
 - Estructura de carpetas con `datos`, `notebooks` y `src`. Git no versiona carpetas vacías, así que la carpeta `datos` lleva un archivo vacío llamado `.gitkeep`.
 - Un entorno virtual `.venv` con `ipython` instalado y un `requirements.txt` generado, sin que el entorno llegue al repositorio.
+  El `requirements.txt` debe guardarse en UTF-8. En Windows PowerShell, `pip freeze > requirements.txt` lo escribe en UTF-16 y la comprobación automática falla aunque el archivo parezca correcto en el editor. Para evitarlo, se genera con `python -m pip freeze | Out-File -Encoding utf8 requirements.txt` o desde `cmd` o Git Bash.
 - Un `README.md` en Markdown con: título, descripción del proyecto, una tabla de al menos cuatro figuras (nombre, campo y enlace a Wikipedia) y una sección de puesta en marcha.
 - Un cuaderno `notebooks/exploracion.ipynb` con una celda de texto que presente el proyecto y una celda de código que muestre la versión de Python.
 - Un script `src/principal.py` que muestre el título del proyecto.
