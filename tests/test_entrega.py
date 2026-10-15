@@ -64,6 +64,7 @@ def test_requirements():
     requisitos = RAIZ / "requirements.txt"
     assert requisitos.is_file(), "Falta el archivo requirements.txt."
     datos = requisitos.read_bytes()
+
     # pip freeze > requirements.txt en Windows PowerShell 5.1 escribe UTF-16
     utf16 = datos.startswith((b"\xff\xfe", b"\xfe\xff")) or b"\x00" in datos
     assert not utf16, (
